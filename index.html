@@ -63,6 +63,16 @@ html body #rp .warn{font-size:11px;line-height:1.5;background:#fff;color:#444;bo
 html body #rp input{border:0;font:inherit;background:none;color:inherit;width:100%;padding:0}
 html body #rp tr{page-break-inside:avoid}
 @media print{html body.pr #rp{transform:none!important;box-shadow:none;padding:0;width:auto;min-height:0}body.pr #rpw{width:auto!important;height:auto!important;overflow:visible}}
+
+html body #rp.cmp{padding:26px 30px;font-size:11px;line-height:1.35}
+html body #rp.cmp h1{font-size:18px}html body #rp.cmp .rs{margin:0 0 6px;font-size:10.5px}html body #rp.cmp .rh{padding-bottom:6px;margin-bottom:8px}
+html body #rp.cmp .ig div{padding:2px 6px}html body #rp.cmp .ig b{font-size:11px}
+html body #rp.cmp .kg{grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:5px;margin-bottom:6px}
+html body #rp.cmp .kb{padding:4px 7px}html body #rp.cmp .kv{font-size:13px;margin:0 0 1px}html body #rp.cmp .kt{font-size:10px}html body #rp.cmp .kn{font-size:8.5px;padding-top:1px}
+html body #rp.cmp h3{font-size:12px;margin:7px 0 3px}
+html body #rp.cmp th,html body #rp.cmp td{padding:1.5px 5px;font-size:10px;line-height:1.3}html body #rp.cmp th{font-size:9.5px}
+html body #rp.cmp .note{font-size:8.5px;margin:1px 0 3px}html body #rp.cmp .nl{font-size:9px;line-height:1.35}
+html body #rp.cmp .two{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start}
 </style></head><body><header><div class=hd><h1>تكاليف الموالح<span class=tag>تكلفة طن الموالح الصافي ظهر الحاوية</span></h1><div class=acts><button onclick="report('d')">🖨 التقرير المفصل</button> <button onclick="report('m')">🖨 التقرير المجمل</button> <button class=ghost onclick="reset()">الأرقام الأصلية</button> <a class=nav href="safi.html">برنامج صوافي ←</a></div></div></header>
 <main><section><h2>النتيجة</h2><div id=k></div></section><section><h2>المدخلات</h2><div id=inputs></div></section>
 <section><h2>تفصيل تكلفة الطن والحاوية</h2><div class=wrap id=live></div></section>
@@ -546,7 +556,13 @@ function report(type){const TT={d:"التقرير المفصل",m:"التقري�
  printDoc(h,document.title+" - "+TT)}
 
 let RT='';
-function printDoc(h,title){RT=title;$('rp').innerHTML=h;$('ovm').textContent='';$('ov').classList.add('on');$('ovs').scrollTop=0;document.body.style.overflow='hidden';fit()}
+function compact(){const r=$('rp');r.classList.add('cmp');const hs=[...r.querySelectorAll(':scope>h3')];if(hs.length<3)return;
+ const g=document.createElement('div');g.className='two';const cols=[document.createElement('div'),document.createElement('div')];
+ const rest=hs.slice(hs.length>=5?-2:-3);const kg=r.querySelector('.kg');if(kg)kg.style.gridTemplateColumns='repeat('+(kg.children.length>4?3:4)+',1fr)'; // last sections go side by side
+ let n=rest[0];const items=[];while(n){items.push(n);n=n.nextSibling}
+ r.insertBefore(g,rest[0]);let hi=-1;items.forEach(e=>{if(e.tagName=='H3')hi++;cols[hi<=0?0:1].appendChild(e)});cols.forEach(c=>g.appendChild(c))}
+
+function printDoc(h,title){RT=title;$('rp').innerHTML=h;compact();$('ovm').textContent='';$('ov').classList.add('on');$('ovs').scrollTop=0;document.body.style.overflow='hidden';fit()}
 function fit(){const r=$('rp'),wr=$('rpw'),w=$('ovs').clientWidth-8,k=Math.min(1,w/794);r.style.zoom='';r.style.transform=k<1?'scale('+k+')':'none';wr.style.width=(794*k)+'px';wr.style.height=(r.offsetHeight*k)+'px'}
 function D(x){const m=String(x||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);return m?m[3]+'/'+m[2]+'/'+m[1]:x}
 const IG=a=>'<div class=ig>'+a.map(x=>`<div><small>${x[0]}</small><b>${x[1]}</b></div>`).join('')+'</div>';
@@ -556,15 +572,13 @@ function closeR(){$('ov').classList.remove('on');document.body.style.overflow=''
 function prt(){document.body.classList.add('pr');setTimeout(()=>{try{window.print()}catch(e){}},100)}
 window.addEventListener('afterprint',()=>document.body.classList.remove('pr'));
 async function makePdf(){const src=$('rp'),c=src.cloneNode(true);c.removeAttribute('id');c.style.cssText='position:fixed;left:-10000px;top:0;width:794px;padding:40px 45px;background:#fff;zoom:1';
- const box=document.createElement('div');box.id='rp';box.style.cssText='position:fixed;left:-10000px;top:0;transform:none;box-shadow:none;min-height:0';box.innerHTML=src.innerHTML;document.body.appendChild(box);
+ const box=document.createElement('div');box.id='rp';box.style.cssText='position:fixed;left:-10000px;top:0;transform:none;box-shadow:none;min-height:0';box.className=src.className;box.innerHTML=src.innerHTML;document.body.appendChild(box);
  try{if(document.fonts&&document.fonts.ready)await document.fonts.ready;
  const cv=await html2canvas(box,{scale:2,backgroundColor:'#fff',useCORS:true,logging:false});
  const {jsPDF}=window.jspdf,doc=new jsPDF({unit:'mm',format:'a4'});const pw=210,ph=297,pxPerMm=cv.width/pw,pageH=Math.floor(ph*pxPerMm);
  // cut pages at row boundaries where possible
  const rows=[...box.querySelectorAll('tr,h3,.tot,p,li')].map(e=>(e.getBoundingClientRect().bottom-box.getBoundingClientRect().top)*2);
- let y=0,first=true;while(y<cv.height-2){let end=Math.min(y+pageH,cv.height);if(end<cv.height){const ok=rows.filter(b=>b>y+pageH*0.5&&b<=end);if(ok.length)end=Math.ceil(Math.max(...ok))+2}
-  const pc=document.createElement('canvas');pc.width=cv.width;pc.height=end-y;const g=pc.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,pc.width,pc.height);g.drawImage(cv,0,y,cv.width,end-y,0,0,cv.width,end-y);
-  if(!first)doc.addPage();first=false;doc.addImage(pc.toDataURL('image/jpeg',0.92),'JPEG',0,0,pw,(end-y)/pxPerMm);y=end}
+ const sc=Math.min(1,pageH/cv.height),wmm=pw*sc,hmm=cv.height/pxPerMm*sc;doc.addImage(cv.toDataURL('image/jpeg',0.92),'JPEG',(pw-wmm)/2,0,wmm,hmm);window.__sc=sc;
  return doc}finally{box.remove()}}
 async function pdf(){const m=$('ovm');m.textContent='جاري تجهيز الـ PDF...';
  try{const doc=await makePdf(),name=(RT||'تقرير')+'.pdf',blob=doc.output('blob'),url=URL.createObjectURL(blob);
