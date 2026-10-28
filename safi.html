@@ -73,7 +73,7 @@ html body #rp.cmp h3{font-size:12px;margin:7px 0 3px}
 html body #rp.cmp th,html body #rp.cmp td{padding:1.5px 5px;font-size:10px;line-height:1.3}html body #rp.cmp th{font-size:9.5px}
 html body #rp.cmp .note{font-size:8.5px;margin:1px 0 3px}html body #rp.cmp .nl{font-size:9px;line-height:1.35}
 html body #rp.cmp .two{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start}
-</style></head><body><header><div class=hd><h1>صوافي<span class=tag>صافي سعر البيع في السعودية مقابل التكلفة</span></h1><div class=acts><button onclick="report('d')">🖨 التقرير المفصل</button> <button onclick="report('m')">🖨 التقرير المجمل</button> <button class=ghost onclick="reset()">أرقام الملف الأصلية</button> <a class=nav href="index.html">تكاليف الموالح ←</a></div></div></header>
+</style></head><body><header><div class=hd><h1>صوافي<span class=tag>صافي سعر البيع في السعودية مقابل التكلفة</span><span id=ls style="display:block;font-size:11px;color:#cbd5e1;font-weight:400"></span></h1><div class=acts><button onclick="report('d')">🖨 التقرير المفصل</button> <button onclick="report('m')">🖨 التقرير المجمل</button> <button class=ghost onclick="reset()">أرقام الملف الأصلية</button> <a class=nav href="index.html">تكاليف الموالح ←</a></div></div></header>
 <main><section><h2>صافي سعر البيع هنا</h2><div id=k></div><p id=warn></p></section><section><h2>الأساسيات</h2><div id=inputs></div></section>
 <section><h2>المبيعات في السعودية (سعر البيع للعبوة بالريال)</h2><div class=wrap><table id=lt></table></div><button onclick="add('lines')" style="margin-top:6px">+ سطر بيع</button></section>
 <section><h2>النتيجة</h2><div class=wrap id=live></div></section>
@@ -518,7 +518,9 @@ function calc(s){const r={},u=s.sar,br=s.mode==='براد';
  r.warn=r.noClient?'تنبيه: العميل مش موجود في جدول العملاء — العمولة محسوبة صفر':(r.frV===0?'تنبيه: نولون الشحن لل'+s.mode+' غير مدخل — الصافي الحالي قبل خصم النولون':'');
  return r}
 if(typeof module!=='undefined')module.exports={DEF,calc};
-const KEY='safiNetback';let S=JSON.parse(localStorage.getItem(KEY)||'null')||JSON.parse(JSON.stringify(DEF));
+function _ld(K,OLD){let o=null;try{const raw=localStorage.getItem(K);if(raw){const p=JSON.parse(raw);o=p&&p.S?p.S:p}else if(OLD){const r2=localStorage.getItem(OLD);if(r2)o=JSON.parse(r2)}}catch(e){o=null}
+ const d=JSON.parse(JSON.stringify(DEF));if(!o||typeof o!=='object')return d;for(const k in d){if(o[k]!==undefined&&o[k]!==null&&(Array.isArray(d[k])===Array.isArray(o[k])))d[k]=o[k]}for(const k in o)if(!(k in d))d[k]=o[k];return d}
+const SK='safiNetback.v2';let S=_ld(SK,'safiNetback');
 const $=id=>document.getElementById(id);
 const f=(x,d=2)=>x==null||isNaN(x)?'—':Number(x+0===0?0:x).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
 const B=(t,dir)=>`<bdi${dir?' dir=ltr':''}>${t}</bdi>`;
@@ -542,7 +544,12 @@ function ch(e){const t=e.target;
   if(j==0&&e.type=='change'&&a!='lines'&&a!='exp'){save();build();return}}
  else S[t.dataset.k]=t.type=='date'?t.value:(+t.value||0);
  save();upd()}
-function save(){localStorage.setItem(KEY,JSON.stringify(S))}
+function save(){try{localStorage.setItem(SK,JSON.stringify({ver:2,t:Date.now(),S}));_ls(Date.now())}catch(e){const n=document.getElementById('ls');if(n)n.textContent='تعذّر الحفظ على الجهاز (وضع التصفح الخاص؟)'}}
+function _ls(t){const n=document.getElementById('ls');if(!n||!t)return;const d=new Date(t);n.textContent='آخر حفظ: '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')}
+['input','change'].forEach(ev=>document.addEventListener(ev,e=>{if(e.target&&e.target.closest&&e.target.closest('main'))setTimeout(save,0)},true));
+window.addEventListener('pagehide',()=>save());document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')save()});
+window.addEventListener('DOMContentLoaded',()=>{try{const p=JSON.parse(localStorage.getItem(SK)||'null');if(p&&p.t)_ls(p.t)}catch(e){}});
+
 function add(a){S[a].push(a=='lines'?['صنف',S.pk[0][0],0,0]:a=='exp'?['بند جديد',0,0]:a=='clients'?['عميل جديد',0.05]:['عبوة جديدة',10]);save();build()}
 function del(a,i){S[a].splice(i,1);save();build()}
 function reset(){if(confirm('ترجع لأرقام الملف الأصلية؟')){S=JSON.parse(JSON.stringify(DEF));save();build()}}

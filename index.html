@@ -73,7 +73,7 @@ html body #rp.cmp h3{font-size:12px;margin:7px 0 3px}
 html body #rp.cmp th,html body #rp.cmp td{padding:1.5px 5px;font-size:10px;line-height:1.3}html body #rp.cmp th{font-size:9.5px}
 html body #rp.cmp .note{font-size:8.5px;margin:1px 0 3px}html body #rp.cmp .nl{font-size:9px;line-height:1.35}
 html body #rp.cmp .two{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start}
-</style></head><body><header><div class=hd><h1>تكاليف الموالح<span class=tag>تكلفة طن الموالح الصافي ظهر الحاوية</span></h1><div class=acts><button onclick="report('d')">🖨 التقرير المفصل</button> <button onclick="report('m')">🖨 التقرير المجمل</button> <button class=ghost onclick="reset()">الأرقام الأصلية</button> <a class=nav href="safi.html">برنامج صوافي ←</a></div></div></header>
+</style></head><body><header><div class=hd><h1>تكاليف الموالح<span class=tag>تكلفة طن الموالح الصافي ظهر الحاوية</span><span id=ls style="display:block;font-size:11px;color:#cbd5e1;font-weight:400"></span></h1><div class=acts><button onclick="report('d')">🖨 التقرير المفصل</button> <button onclick="report('m')">🖨 التقرير المجمل</button> <button class=ghost onclick="reset()">الأرقام الأصلية</button> <a class=nav href="safi.html">برنامج صوافي ←</a></div></div></header>
 <main><section><h2>النتيجة</h2><div id=k></div></section><section><h2>المدخلات</h2><div id=inputs></div></section>
 <section><h2>تفصيل تكلفة الطن والحاوية</h2><div class=wrap id=live></div></section>
 <section><h2>أسعار العبوات</h2><div class=wrap><table id=pkt></table></div></section>
@@ -508,7 +508,9 @@ const p=s.pk[s.pkg];const q=pc(p);r.packed=q.packed;r.bought=q.bought;r.pkgC=q.c
 r.ton=r.rawT+r.pkgC+r.supT+r.wash;r.kg=r.ton/1000;r.perPkg=r.kg*p[2];r.cont=r.ton*T;
 r.cmp=s.pk.map(x=>({n:x[0],v:r.rawT+r.supT+r.wash+pc(x).cost}));const mn=Math.min(...r.cmp.map(x=>x.v/s.usd));r.cmp.forEach(x=>x.d=x.v/s.usd-mn);return r}
 if(typeof module!=='undefined')module.exports={DEF,calc};
-let S=JSON.parse(localStorage.getItem('citrusCosts')||'null')||JSON.parse(JSON.stringify(DEF));if(S.sar==null)S.sar=3.75;if(S.var&&S.var.some(v=>v[0]=='برتقال')){S.var=S.var.flatMap(v=>v[0]=='برتقال'?[['برتقال أبوسرة',v[1]],['برتقال بلدي',v[1]],['برتقال صيفي',v[1]]]:[v]);}if(S.variety=='برتقال')S.variety='برتقال أبوسرة';
+function _ld(K,OLD){let o=null;try{const raw=localStorage.getItem(K);if(raw){const p=JSON.parse(raw);o=p&&p.S?p.S:p}else if(OLD){const r2=localStorage.getItem(OLD);if(r2)o=JSON.parse(r2)}}catch(e){o=null}
+ const d=JSON.parse(JSON.stringify(DEF));if(!o||typeof o!=='object')return d;for(const k in d){if(o[k]!==undefined&&o[k]!==null&&(Array.isArray(d[k])===Array.isArray(o[k])))d[k]=o[k]}for(const k in o)if(!(k in d))d[k]=o[k];return d}
+const SK='citrusCosts.v2';let S=_ld(SK,'citrusCosts');if(S.sar==null)S.sar=3.75;if(S.var&&S.var.some(v=>v[0]=='برتقال')){S.var=S.var.flatMap(v=>v[0]=='برتقال'?[['برتقال أبوسرة',v[1]],['برتقال بلدي',v[1]],['برتقال صيفي',v[1]]]:[v]);}if(S.variety=='برتقال')S.variety='برتقال أبوسرة';
 const $=id=>document.getElementById(id);
 const f=(x,d=2)=>Number(x).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
 function inp(k,lbl,unit,pct){return `<label>${lbl}<span><input data-k="${k}" type="number" step="any" value="${pct?+(S[k]*100).toFixed(4):S[k]}" ${pct?'data-p=1':''}> ${unit}</span></label>`}
@@ -527,7 +529,12 @@ function ch(e){const t=e.target;
    if(j==0&&e.type=='change'){save();build();return}}
  else if(t.dataset.k=='date')S.date=t.value;else S[t.dataset.k]=t.dataset.p?(+t.value||0)/100:(+t.value||0);
  save();upd()}
-function save(){localStorage.setItem('citrusCosts',JSON.stringify(S))}
+function save(){try{localStorage.setItem(SK,JSON.stringify({ver:2,t:Date.now(),S}));_ls(Date.now())}catch(e){const n=document.getElementById('ls');if(n)n.textContent='تعذّر الحفظ على الجهاز (وضع التصفح الخاص؟)'}}
+function _ls(t){const n=document.getElementById('ls');if(!n||!t)return;const d=new Date(t);n.textContent='آخر حفظ: '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')}
+['input','change'].forEach(ev=>document.addEventListener(ev,e=>{if(e.target&&e.target.closest&&e.target.closest('main'))setTimeout(save,0)},true));
+window.addEventListener('pagehide',()=>save());document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')save()});
+window.addEventListener('DOMContentLoaded',()=>{try{const p=JSON.parse(localStorage.getItem(SK)||'null');if(p&&p.t)_ls(p.t)}catch(e){}});
+
 function addVar(){S.var.push(['صنف جديد',1800]);save();build()}
 function delVar(i){S.var.splice(i,1);save();build()}
 function reset(){if(confirm('ترجع للأرقام الأصلية؟')){S=JSON.parse(JSON.stringify(DEF));save();build()}}
