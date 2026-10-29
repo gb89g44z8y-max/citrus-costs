@@ -1,0 +1,111 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>عدّ الحبات بالصورة</title><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>*{box-sizing:border-box}:root{--n:#16285A;--n2:#22397a;--g:#64748b;--bg:#f1f4f9;--ln:#e2e8f0}
+body{font-family:Cairo,"Noto Naskh Arabic",Tahoma,Arial,sans-serif;margin:0;background:var(--bg);color:#1e293b;line-height:1.5}
+header{background:linear-gradient(135deg,var(--n),var(--n2));color:#fff;padding:18px 16px 46px}
+.hd{max-width:1100px;margin:auto;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+header h1{margin:0;font-size:26px;font-weight:800}header .tag{font-size:13px;opacity:.8;display:block;font-weight:400}
+.acts{display:flex;flex-wrap:wrap;gap:8px}
+button,.btn{background:var(--n);color:#fff;border:0;border-radius:10px;padding:10px 14px;font:inherit;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-size:15px}
+a.nav{font-size:13px;border-radius:10px;padding:8px 12px;text-decoration:none;background:transparent;color:#fff;border:1px solid rgba(255,255,255,.5)}
+button.gr{background:#cbd5e1;color:#334155}button:disabled{opacity:.45}
+main{max-width:1100px;margin:-30px auto 0;padding:0 12px 30px}
+section{background:#fff;border:1px solid var(--ln);border-radius:14px;padding:16px;margin-bottom:14px;box-shadow:0 2px 10px rgba(22,40,90,.06)}
+h2{font-size:17px;margin:0 0 12px;color:var(--n);font-weight:700;display:flex;align-items:center;gap:8px}h2:before{content:"";width:4px;height:18px;background:var(--n);border-radius:2px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:12px}
+.card{background:linear-gradient(160deg,#f8fafc,#eef2f9);border:1px solid var(--ln);border-right:4px solid var(--n);border-radius:12px;padding:10px 12px}
+.card b{display:block;font-size:30px;color:var(--n);line-height:1.2}.card span{font-size:12px;color:var(--g);font-weight:600}
+.ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:10px}
+.ctl label{font-size:13px;color:var(--g);font-weight:600;display:flex;flex-direction:column;gap:2px}
+.ctl input[type=range]{width:100%}
+#wrap{position:relative;margin-top:10px;touch-action:manipulation}#cv{width:100%;height:auto;border-radius:10px;display:block;background:#0f172a}
+#busy{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:rgba(15,23,42,.55);color:#fff;font-weight:700;border-radius:10px;font-size:18px}
+.hint{font-size:13px;color:var(--g)}.mode button{background:#e2e8f0;color:#334155}.mode button.on{background:var(--n);color:#fff}
+ol{margin:0;padding-right:20px;font-size:14px}li{margin-bottom:4px}
+input[type=file]{display:none}
+</style></head><body><header><div class=hd><h1>عدّ الحبات بالصورة<span class=tag>صوّر البرتقال المرصوص والبرنامج يعدّ الحبات ويعلّم على كل حبة</span></h1><div class=acts><a class=nav href="index.html">تكاليف الموالح ←</a> <a class=nav href="safi.html">صوافي ←</a> <a class=nav href="receiving.html">استلام الخام ←</a></div></div></header>
+<main>
+<section><h2>الصورة</h2>
+<div class=row><label class=btn>📷 صوّر<input type=file id=fcam accept="image/*" capture="environment"></label><label class="btn" style="background:#22397a">🖼 اختار صورة<input type=file id=fgal accept="image/*"></label>
+<button class=gr id=bsave disabled>💾 حفظ / مشاركة الصورة</button></div>
+<p class=hint id=msg>صوّر من فوق مباشرة (عمودي على البرتقال)، والصورة كلها برتقال قدر الإمكان، في نور كويس من غير ظل قوي.</p>
+<div class=cards><div class=card><span>عدد الحبات</span><b id=tot>—</b></div><div class=card><span>صفوف × أعمدة (تقريبي)</span><b id=rc style="font-size:24px">—</b></div><div class=card><span>تعديلات يدوية</span><b id=man style="font-size:24px">0</b></div></div>
+<div class="row mode"><span class=hint>اللمس على الصورة:</span><button id=mAuto class=on>تلقائي (لمس علامة = شيل، لمس فاضي = إضافة)</button><button id=undo class=gr>↶ تراجع</button><button id=redo class=gr>↻ أعد العد</button></div>
+<div id=wrap><canvas id=cv width=720 height=480></canvas><div id=busy>بيعدّ…</div></div>
+<div class=ctl>
+<label>حجم الحبة: <span id=szv>تلقائي</span><input type=range id=sz min=0 max=100 value=0></label>
+<label>الحساسية: <span id=snv>50</span><input type=range id=sn min=0 max=100 value=50></label>
+<label style="flex-direction:row;align-items:center;gap:8px"><input type=checkbox id=gr> يشمل الثمار الخضرا (ليمون / بلدي مخضّر)</label>
+</div></section>
+<section><h2>إزاي تستخدمه</h2><ol>
+<li>صوّر الطبقة اللي فوق في الصندوق أو الكرتونة، أو صفوف البرتقال على الترابيزة، من فوق مباشرة.</li>
+<li>البرنامج بيعدّ لوحده ويحط دايرة برقم على كل حبة، والعدد الكلي فوق.</li>
+<li>لو فيه حبة ما اتعلّمتش: المس عليها تتضاف. لو فيه علامة غلط: المسها تتشال. «تراجع» بيرجع آخر تعديل.</li>
+<li>لو العلامات أصغر أو أكبر من الحبات حرّك «حجم الحبة»، ولو بيفوّت حبات زوّد «الحساسية».</li>
+<li>«حفظ / مشاركة» بيطلّع الصورة بالعلامات والعدد تبعتها واتساب أو تحفظها.</li>
+</ol><p class=hint>العدّ كله بيتم على الموبايل نفسه، والصورة مش بتترفع على أي سيرفر. البرنامج بيعدّ الحبات الظاهرة في الصورة بس (مش اللي تحتها).</p></section>
+</main>
+<script>
+/* CORE-START */
+function citrusCount(d,w,h,o){o=o||{};var sens=o.sens==null?0.5:o.sens,N=w*h,V=new Float32Array(N),M=new Uint8Array(N);
+var sMin=0.5-0.3*sens,vMin=0.38-0.2*sens,hMax=o.green?95:72;
+for(var i=0;i<N;i++){var r=d[i*4]/255,g=d[i*4+1]/255,b=d[i*4+2]/255,mx=Math.max(r,g,b),mn=Math.min(r,g,b),c=mx-mn,hh=0;
+if(c>0){if(mx===r)hh=60*(((g-b)/c+6)%6);else if(mx===g)hh=60*((b-r)/c+2);else hh=60*((r-g)/c+4);}
+var s=mx?c/mx:0;V[i]=mx;M[i]=(hh>=8&&hh<=hMax&&s>=sMin&&mx>=vMin)?1:0;}
+// seam removal: darker than local mean
+var br=Math.max(4,Math.round(Math.min(w,h)/40)),B=boxBlur(V,w,h,br);
+var k=0.72+0.12*(1-sens);for(i=0;i<N;i++)if(M[i]&&V[i]<k*B[i])M[i]=0;
+M=morph(M,w,h,1,0);M=morph(M,w,h,1,1);M=morph(M,w,h,1,1);M=morph(M,w,h,1,0);
+var D=edt(M,w,h);
+fillHoles(M,w,h,Math.round(N/1500),V);var F=new Float32Array(N);for(i=0;i<N;i++)F[i]=M[i]?(0.5+0.5*V[i]):0;
+function gb(A,sg){var b=Math.max(1,Math.round(sg));return boxBlur(boxBlur(boxBlur(A,w,h,b),w,h,b),w,h,b);}
+function dog(r){var A=gb(F,r*0.5),B=gb(F,r*1.1),O=new Float32Array(N);for(var i=0;i<N;i++)O[i]=A[i]-B[i];return O;}
+var R=o.radius,md=Math.min(w,h);var DT=edt(M,w,h),pk=[];for(var y=2;y<h-2;y++)for(var x=2;x<w-2;x++){var v=DT[y*w+x];if(v<3)continue;var ok=1;for(var dy=-2;dy<=2&&ok;dy++)for(var dx=-2;dx<=2;dx++){if(DT[(y+dy)*w+x+dx]>v){ok=0;break;}}if(ok)pk.push(v);}pk.sort(function(a,b){return a-b});var p90=pk[Math.floor(pk.length*0.9)]||10,ff=pk.filter(function(v){return v>=0.45*p90});var Rdt=ff[Math.floor(ff.length*0.5)]||10;
+if(!R)R=Rdt*(o.f||1.05);
+var Dg=dog(R/(o.dr||1.5)),ys=[],cand=[];var sm=0,cn=0;for(i=0;i<N;i++){if(Dg[i]>0){sm+=Dg[i];cn++;}}
+var thr=(o.tk||(0.1+0.5*(1-sens)))*(sm/Math.max(cn,1));
+var rr=Math.max(1,Math.round(R*0.3));
+for(var y=0;y<h;y++)for(var x=0;x<w;x++){var id=y*w+x,v=Dg[id];if(v<thr||!M[id])continue;var ok=1;
+for(var dy=-rr;dy<=rr&&ok;dy+=1){var yy=y+dy;if(yy<0||yy>=h)continue;for(var dx=-rr;dx<=rr;dx++){var xx=x+dx;if(xx<0||xx>=w)continue;if(Dg[yy*w+xx]>v){ok=0;break;}}}if(ok)cand.push(id);}
+cand.sort(function(a,b){return Dg[b]-Dg[a]});var sep=(o.sep||1.1)*R,pts=[];
+for(var j=0;j<cand.length;j++){var id=cand[j],cx=id%w,cy=(id-cx)/w,bad=0;for(var q=0;q<pts.length;q++){var ex=pts[q].x-cx,ey=pts[q].y-cy;if(ex*ex+ey*ey<sep*sep){bad=1;break;}}if(!bad)pts.push({x:cx,y:cy,r:R});}
+var I=new Float64Array((w+1)*(h+1));for(var y=0;y<h;y++){var rs=0;for(var x=0;x<w;x++){rs+=M[y*w+x];I[(y+1)*(w+1)+x+1]=I[y*(w+1)+x+1]+rs;}}
+var hs=Math.max(2,Math.round(R*(o.cr||0.6))),cov=o.cov||0.6;pts=pts.filter(function(p){var x0=Math.max(0,p.x-hs),x1=Math.min(w,p.x+hs),y0=Math.max(0,p.y-hs),y1=Math.min(h,p.y+hs),A=(x1-x0)*(y1-y0);if(A<hs*hs)return false;var S=I[y1*(w+1)+x1]-I[y0*(w+1)+x1]-I[y1*(w+1)+x0]+I[y0*(w+1)+x0];return S/A>=cov;});
+return{pts:pts,r:R,mask:M};}
+function fillHoles(M,w,h,maxA,V){var L=new Int32Array(w*h),st=[];for(var s0=0;s0<w*h;s0++){if(M[s0]||L[s0])continue;var comp=[],edge=0;st.push(s0);L[s0]=1;while(st.length){var p=st.pop();comp.push(p);var x=p%w,y=(p-x)/w;if(x==0||y==0||x==w-1||y==h-1)edge=1;var nb=[x>0?p-1:-1,x<w-1?p+1:-1,y>0?p-w:-1,y<h-1?p+w:-1];for(var k=0;k<4;k++){var q=nb[k];if(q>=0&&!M[q]&&!L[q]){L[q]=1;st.push(q);}}}var mv=0;for(var k=0;k<comp.length;k++)mv+=V[comp[k]];mv/=comp.length;if(!edge&&((comp.length<=maxA&&mv>0.75)||comp.length<=maxA/3))for(var k=0;k<comp.length;k++)M[comp[k]]=1;}}
+function boxBlur(A,w,h,r){var T=new Float32Array(w*h),O=new Float32Array(w*h);
+for(var y=0;y<h;y++){var s=0,n=0;for(var x=-r;x<w;x++){if(x+r<w){s+=A[y*w+x+r];n++;}if(x-r-1>=0){s-=A[y*w+x-r-1];n--;}if(x>=0)T[y*w+x]=s/n;}}
+for(var x=0;x<w;x++){var s=0,n=0;for(var y=-r;y<h;y++){if(y+r<h){s+=T[(y+r)*w+x];n++;}if(y-r-1>=0){s-=T[(y-r-1)*w+x];n--;}if(y>=0)O[y*w+x]=s/n;}}return O;}
+function morph(M,w,h,r,dil){var O=new Uint8Array(w*h);for(var y=0;y<h;y++)for(var x=0;x<w;x++){var v=dil?0:1;
+for(var dy=-r;dy<=r;dy++){var yy=y+dy;if(yy<0||yy>=h)continue;for(var dx=-r;dx<=r;dx++){var xx=x+dx;if(xx<0||xx>=w)continue;var m=M[yy*w+xx];if(dil&&m){v=1;break;}if(!dil&&!m){v=0;break;}}if(dil?v:!v)break;}O[y*w+x]=v;}return O;}
+function edt1(f,n,dd,v,z){var k=0;v[0]=0;z[0]=-1e20;z[1]=1e20;for(var q=1;q<n;q++){var s=((f[q]+q*q)-(f[v[k]]+v[k]*v[k]))/(2*q-2*v[k]);while(s<=z[k]){k--;s=((f[q]+q*q)-(f[v[k]]+v[k]*v[k]))/(2*q-2*v[k]);}k++;v[k]=q;z[k]=s;z[k+1]=1e20;}
+k=0;for(q=0;q<n;q++){while(z[k+1]<q)k++;dd[q]=(q-v[k])*(q-v[k])+f[v[k]];}}
+function edt(M,w,h){var INF=1e10,n=Math.max(w,h),f=new Float64Array(n),dd=new Float64Array(n),v=new Int32Array(n),z=new Float64Array(n+1),G=new Float64Array(w*h);
+for(var x=0;x<w;x++){for(var y=0;y<h;y++)f[y]=M[y*w+x]?INF:0;edt1(f,h,dd,v,z);for(y=0;y<h;y++)G[y*w+x]=dd[y];}
+var D=new Float32Array(w*h);for(y=0;y<h;y++){for(x=0;x<w;x++)f[x]=G[y*w+x];edt1(f,w,dd,v,z);for(x=0;x<w;x++)D[y*w+x]=Math.sqrt(dd[x]);}return D;}
+/* CORE-END */
+
+var cv=document.getElementById('cv'),cx=cv.getContext('2d'),IMG=null,W=0,H=0,auto=[],pts=[],hist=[],R=20,nMan=0,MAXD=720;
+function $(i){return document.getElementById(i)}
+function load(f){if(!f)return;var u=URL.createObjectURL(f),im=new Image();im.onload=function(){var s=Math.min(1,MAXD/Math.max(im.width,im.height));W=Math.round(im.width*s);H=Math.round(im.height*s);
+var c=document.createElement('canvas');c.width=W;c.height=H;var x=c.getContext('2d');x.drawImage(im,0,0,W,H);IMG=c;URL.revokeObjectURL(u);run();};im.onerror=function(){$('msg').textContent='مش قادر أفتح الصورة، جرّب صورة تانية.'};im.src=u;}
+$('fcam').onchange=function(e){load(e.target.files[0]);e.target.value=''};$('fgal').onchange=function(e){load(e.target.files[0]);e.target.value=''};
+function opts(){var o={sens:$('sn').value/100,green:$('gr').checked};var z=+$('sz').value;if(z>0)o.radius=Math.max(4,Math.min(W,H)*(0.01+z/100*0.24));return o;}
+function run(){if(!IMG)return;$('busy').style.display='flex';setTimeout(function(){var d=IMG.getContext('2d').getImageData(0,0,W,H).data;var r=citrusCount(d,W,H,opts());R=r.r;
+pts=r.pts.map(function(p){return{x:p.x,y:p.y}});hist=[];nMan=0;$('szv').textContent=$('sz').value>0?Math.round(R*2)+' بكسل':'تلقائي ('+Math.round(R*2)+' بكسل)';$('busy').style.display='none';draw();},30);}
+function rowsCols(){if(pts.length<2)return'—';var ys=pts.map(function(p){return p.y}).sort(function(a,b){return a-b}),rows=1;for(var i=1;i<ys.length;i++)if(ys[i]-ys[i-1]>R*0.9)rows++;var cols=Math.round(pts.length/rows);return rows+' × '+cols;}
+function order(){var P=pts.slice().sort(function(a,b){return a.y-b.y}),rows=[],cur=[];P.forEach(function(p){if(cur.length&&p.y-cur[cur.length-1].y>R*0.9){rows.push(cur);cur=[]}cur.push(p)});if(cur.length)rows.push(cur);var o=[];rows.forEach(function(r){r.sort(function(a,b){return b.x-a.x});o=o.concat(r)});return o;}
+function paint(x,scale,band){x.drawImage(IMG,0,band,W*scale,H*scale);var O=order(),rr=R*scale,fs=Math.max(10,Math.min(22,rr*0.75));x.lineWidth=Math.max(2,rr*0.09);
+O.forEach(function(p,i){var px=p.x*scale,py=p.y*scale+band;x.beginPath();x.arc(px,py,rr*0.82,0,7);x.strokeStyle='rgba(0,0,0,.55)';x.lineWidth=Math.max(3,rr*0.14);x.stroke();x.strokeStyle=p.m?'#22d3ee':'#4ade80';x.lineWidth=Math.max(2,rr*0.08);x.stroke();
+x.font='bold '+fs+'px Cairo,Arial';x.textAlign='center';x.textBaseline='middle';var t=String(i+1),tw=x.measureText(t).width+8;x.fillStyle='rgba(22,40,90,.85)';x.fillRect(px-tw/2,py-fs*0.65,tw,fs*1.3);x.fillStyle='#fff';x.fillText(t,px,py+1);});}
+function draw(){cv.width=W;cv.height=H;paint(cx,1,0);$('tot').textContent=pts.length;$('rc').textContent=rowsCols();$('man').textContent=nMan;$('bsave').disabled=false;$('bsave').className='';
+$('msg').textContent='العدد: '+pts.length+' حبة. المس على حبة ناقصة علشان تضيفها، أو على علامة غلط علشان تشيلها.';}
+cv.addEventListener('click',function(e){if(!IMG)return;var b=cv.getBoundingClientRect(),x=(e.clientX-b.left)*W/b.width,y=(e.clientY-b.top)*H/b.height,bi=-1,bd=1e9;
+pts.forEach(function(p,i){var d=Math.hypot(p.x-x,p.y-y);if(d<bd){bd=d;bi=i}});hist.push(pts.slice());if(bi>=0&&bd<R*0.8){pts.splice(bi,1)}else{pts.push({x:x,y:y,m:1})}nMan++;draw();});
+$('undo').onclick=function(){if(hist.length){pts=hist.pop();nMan=Math.max(0,nMan-1);draw();}};$('redo').onclick=run;
+var tmr;function deb(){clearTimeout(tmr);tmr=setTimeout(run,250)}$('sz').oninput=function(){deb()};$('sn').oninput=function(){$('snv').textContent=this.value;deb()};$('gr').onchange=run;
+$('bsave').onclick=function(){if(!IMG)return;var sc=Math.max(1,1080/Math.max(W,H)),band=Math.round(70*sc),c=document.createElement('canvas');c.width=Math.round(W*sc);c.height=Math.round(H*sc)+band;var x=c.getContext('2d');
+x.fillStyle='#16285A';x.fillRect(0,0,c.width,band);paint(x,sc,band);x.fillStyle='#fff';x.textAlign='right';x.textBaseline='middle';x.font='bold '+Math.round(30*sc)+'px Cairo,Arial';x.fillText('عدد الحبات: '+pts.length,c.width-16*sc,band/2);
+x.textAlign='left';x.font=Math.round(15*sc)+'px Cairo,Arial';var dt=new Date();x.fillText(dt.toLocaleDateString('ar-EG')+'  '+dt.toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'}),16*sc,band/2);
+c.toBlob(function(bl){var nm='عد_الحبات_'+pts.length+'.jpg',f=new File([bl],nm,{type:'image/jpeg'});if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:'عدد الحبات: '+pts.length}).catch(function(){})}else{var a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download=nm;a.click();}},'image/jpeg',0.9);};
+</script></body></html>
