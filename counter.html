@@ -30,12 +30,12 @@ input[type=file]{display:none}
 <button class=gr id=bsave disabled>💾 حفظ / مشاركة الصورة</button></div>
 <p class=hint id=msg>صوّر من فوق مباشرة (عمودي على البرتقال)، والصورة كلها برتقال قدر الإمكان، في نور كويس من غير ظل قوي.</p>
 <div class=cards><div class=card><span>عدد الحبات</span><b id=tot>—</b></div><div class=card><span>صفوف × أعمدة (تقريبي)</span><b id=rc style="font-size:24px">—</b></div><div class=card><span>تعديلات يدوية</span><b id=man style="font-size:24px">0</b></div></div>
-<div class="row mode"><span class=hint>اللمس على الصورة:</span><button id=mAuto class=on>تلقائي (لمس علامة = شيل، لمس فاضي = إضافة)</button><button id=undo class=gr>↶ تراجع</button><button id=redo class=gr>↻ أعد العد</button></div>
+<div class="row mode" style="margin-bottom:8px"><span class=hint>طريقة العدّ:</span><button id=mML class=on>🤖 ذكاء اصطناعي (أدق)</button><button id=mCV>🎨 ألوان (سريع)</button></div><div class="row mode"><span class=hint>اللمس على الصورة:</span><button id=mAuto class=on>تلقائي (لمس علامة = شيل، لمس فاضي = إضافة)</button><button id=undo class=gr>↶ تراجع</button><button id=redo class=gr>↻ أعد العد</button></div>
 <div id=wrap><canvas id=cv width=720 height=480></canvas><div id=busy>بيعدّ…</div></div>
 <div class=ctl>
-<label>حجم الحبة: <span id=szv>تلقائي</span><input type=range id=sz min=0 max=100 value=0></label>
+<label id=szl>حجم الحبة (طريقة الألوان): <span id=szv>تلقائي</span><input type=range id=sz min=0 max=100 value=0></label>
 <label>الحساسية: <span id=snv>50</span><input type=range id=sn min=0 max=100 value=50></label>
-<label style="flex-direction:row;align-items:center;gap:8px"><input type=checkbox id=gr> يشمل الثمار الخضرا (ليمون / بلدي مخضّر)</label>
+<label style="flex-direction:row;align-items:center;gap:8px"><input type=checkbox id=gr> (طريقة الألوان) يشمل الثمار الخضرا (ليمون / بلدي مخضّر)</label>
 </div></section>
 <section><h2>إزاي تستخدمه</h2><ol>
 <li>صوّر الطبقة اللي فوق في الصندوق أو الكرتونة، أو صفوف البرتقال على الترابيزة، من فوق مباشرة.</li>
@@ -43,7 +43,7 @@ input[type=file]{display:none}
 <li>لو فيه حبة ما اتعلّمتش: المس عليها تتضاف. لو فيه علامة غلط: المسها تتشال. «تراجع» بيرجع آخر تعديل.</li>
 <li>لو العلامات أصغر أو أكبر من الحبات حرّك «حجم الحبة»، ولو بيفوّت حبات زوّد «الحساسية».</li>
 <li>«حفظ / مشاركة» بيطلّع الصورة بالعلامات والعدد تبعتها واتساب أو تحفظها.</li>
-</ol><p class=hint>العدّ كله بيتم على الموبايل نفسه، والصورة مش بتترفع على أي سيرفر. البرنامج بيعدّ الحبات الظاهرة في الصورة بس (مش اللي تحتها).</p></section>
+</ol><p class=hint>العدّ كله بيتم على الموبايل نفسه بنموذج ذكاء اصطناعي (YOLOv10) بيتحمّل مرة واحدة ويشتغل بعدها من غير نت، والصورة مش بتترفع على أي سيرفر. الصورة بتتقسّم لمربعات وكل مربع بيتفحص لوحده علشان الحبات الصغيرة والمزحومة. «ألوان» طريقة أسرع بديلة بتنفع للحبات المرصوصة صفوف منتظمة. البرنامج بيعدّ الحبات الظاهرة في الصورة بس (مش اللي تحتها).</p></section>
 </main>
 <script>
 /* CORE-START */
@@ -85,27 +85,58 @@ for(var x=0;x<w;x++){for(var y=0;y<h;y++)f[y]=M[y*w+x]?INF:0;edt1(f,h,dd,v,z);fo
 var D=new Float32Array(w*h);for(y=0;y<h;y++){for(x=0;x<w;x++)f[x]=G[y*w+x];edt1(f,w,dd,v,z);for(x=0;x<w;x++)D[y*w+x]=Math.sqrt(dd[x]);}return D;}
 /* CORE-END */
 
-var cv=document.getElementById('cv'),cx=cv.getContext('2d'),IMG=null,W=0,H=0,auto=[],pts=[],hist=[],R=20,nMan=0,MAXD=720;
+var cv=document.getElementById('cv'),cx=cv.getContext('2d'),IMG=null,W=0,H=0,auto=[],pts=[],hist=[],R=20,nMan=0,MAXD=720,SRC=null,RAW=null,SESS=null,MODE='ml';
 function $(i){return document.getElementById(i)}
 function load(f){if(!f)return;var u=URL.createObjectURL(f),im=new Image();im.onload=function(){var s=Math.min(1,MAXD/Math.max(im.width,im.height));W=Math.round(im.width*s);H=Math.round(im.height*s);
-var c=document.createElement('canvas');c.width=W;c.height=H;var x=c.getContext('2d');x.drawImage(im,0,0,W,H);IMG=c;URL.revokeObjectURL(u);run();};im.onerror=function(){$('msg').textContent='مش قادر أفتح الصورة، جرّب صورة تانية.'};im.src=u;}
+var c=document.createElement('canvas');c.width=W;c.height=H;var x=c.getContext('2d');x.drawImage(im,0,0,W,H);IMG=c;var s2=Math.min(1,2048/Math.max(im.width,im.height)),S=document.createElement('canvas');S.width=Math.round(im.width*s2);S.height=Math.round(im.height*s2);S.getContext('2d').drawImage(im,0,0,S.width,S.height);SRC=S;RAW=null;URL.revokeObjectURL(u);run();};im.onerror=function(){$('msg').textContent='مش قادر أفتح الصورة، جرّب صورة تانية.'};im.src=u;}
 $('fcam').onchange=function(e){load(e.target.files[0]);e.target.value=''};$('fgal').onchange=function(e){load(e.target.files[0]);e.target.value=''};
 function opts(){var o={sens:$('sn').value/100,green:$('gr').checked};var z=+$('sz').value;if(z>0)o.radius=Math.max(4,Math.min(W,H)*(0.01+z/100*0.24));return o;}
-function run(){if(!IMG)return;$('busy').style.display='flex';setTimeout(function(){var d=IMG.getContext('2d').getImageData(0,0,W,H).data;var r=citrusCount(d,W,H,opts());R=r.r;
+function run(){if(!IMG)return;if(MODE==='ml')return runML();runCV();}
+function runCV(){$('busy').style.display='flex';$('busy').textContent='بيعدّ…';setTimeout(function(){var d=IMG.getContext('2d').getImageData(0,0,W,H).data;var r=citrusCount(d,W,H,opts());R=r.r;
 pts=r.pts.map(function(p){return{x:p.x,y:p.y}});hist=[];nMan=0;$('szv').textContent=$('sz').value>0?Math.round(R*2)+' بكسل':'تلقائي ('+Math.round(R*2)+' بكسل)';$('busy').style.display='none';draw();},30);}
+/* ---- ML: YOLOv10s (COCO) tiled detection, fully in browser ---- */
+var GRIDS=[1,3,5],KEEP={49:1,47:1,32:1};
+function busy(t){$('busy').style.display=t?'flex':'none';if(t)$('busy').textContent=t;}
+async function getSess(){if(SESS)return SESS;busy('بيحمّل نموذج الذكاء الاصطناعي… (أول مرة بس ~25 ميجا)');
+if(!window.ort){await new Promise(function(ok,no){var sc=document.createElement('script');sc.src='ml/ort.wasm.min.js';sc.onload=ok;sc.onerror=no;document.head.appendChild(sc);});}
+ort.env.wasm.wasmPaths=new URL('ml/',location.href).href;ort.env.wasm.numThreads=1;
+var r=await fetch('ml/fruit-yolov10s-fp16.onnx');var tot=+r.headers.get('content-length')||14600000,rd=r.body.getReader(),ch=[],got=0;
+while(true){var q=await rd.read();if(q.done)break;ch.push(q.value);got+=q.value.length;busy('بيحمّل النموذج… '+Math.min(100,Math.round(got/tot*100))+'%');}
+var buf=new Uint8Array(got),o=0;ch.forEach(function(c){buf.set(c,o);o+=c.length});busy('بيجهّز النموذج…');
+SESS=await ort.InferenceSession.create(buf,{executionProviders:['wasm']});return SESS;}
+async function detectRaw(){var sess=await getSess(),Wd=SRC.width,Hd=SRC.height,L=Math.max(Wd,Hd),jobs=[];
+GRIDS.forEach(function(g){var st=L/g,nx=Math.max(1,Math.round(Wd/st)),ny=Math.max(1,Math.round(Hd/st)),t=g===1?L:Math.min(L,st*1.35),tw=Math.min(t,Wd),th=Math.min(t,Hd);
+for(var i=0;i<nx;i++)for(var j=0;j<ny;j++){var x0=nx===1?0:(Wd-tw)*i/(nx-1),y0=ny===1?0:(Hd-th)*j/(ny-1);if(g===1){x0=0;y0=0;}jobs.push([g,x0,y0,g===1?Wd:tw,g===1?Hd:th]);}});
+var tc=document.createElement('canvas');tc.width=640;tc.height=640;var tx=tc.getContext('2d',{willReadFrequently:true}),inp=new Float32Array(3*640*640),out=[];
+for(var k=0;k<jobs.length;k++){busy('بيعدّ بالذكاء الاصطناعي… '+Math.round(k/jobs.length*100)+'%');await new Promise(function(r){setTimeout(r,0)});
+var J=jobs[k],g=J[0],x0=J[1],y0=J[2],cw=J[3],chh=J[4],s=640/Math.max(cw,chh);tx.fillStyle='rgb(114,114,114)';tx.fillRect(0,0,640,640);tx.drawImage(SRC,x0,y0,cw,chh,0,0,cw*s,chh*s);
+var d=tx.getImageData(0,0,640,640).data,P=640*640;for(var p=0;p<P;p++){inp[p]=d[p*4]/255;inp[P+p]=d[p*4+1]/255;inp[2*P+p]=d[p*4+2]/255;}
+var feeds={};feeds[sess.inputNames[0]]=new ort.Tensor('float32',inp,[1,3,640,640]);var res=await sess.run(feeds),o=res[sess.outputNames[0]].data,m=3;
+for(var a=0;a<300;a++){var sc=o[a*6+4],c=Math.round(o[a*6+5]);if(sc<0.05||!KEEP[c])continue;var x1=o[a*6],y1=o[a*6+1],x2=o[a*6+2],y2=o[a*6+3];
+if(g>1&&((x1<m&&x0>0)||(y1<m&&y0>0)||(x2>cw*s-m&&x0+cw<Wd-1)||(y2>chh*s-m&&y0+chh<Hd-1)))continue;
+out.push([x0+x1/s,y0+y1/s,x0+x2/s,y0+y2/s,sc]);}}
+return out;}
+function nmsBoxes(b,conf){b=b.filter(function(z){return z[4]>=conf});if(b.length>3){var ar=b.map(function(z){return(z[2]-z[0])*(z[3]-z[1])}).sort(function(a,c){return a-c}),med=ar[ar.length>>1];b=b.filter(function(z){return(z[2]-z[0])*(z[3]-z[1])<5*med});}
+b.sort(function(a,c){return c[4]-a[4]});var keep=[];b.forEach(function(z){var a1=(z[2]-z[0])*(z[3]-z[1]);for(var i=0;i<keep.length;i++){var k=keep[i],ix=Math.max(0,Math.min(z[2],k[2])-Math.max(z[0],k[0])),iy=Math.max(0,Math.min(z[3],k[3])-Math.max(z[1],k[1])),I=ix*iy,a2=(k[2]-k[0])*(k[3]-k[1]);if(I/(a1+a2-I)>0.45||I/Math.min(a1,a2)>0.7)return;}keep.push(z)});return keep;}
+function confNow(){return Math.max(0.05,0.27-0.3*$('sn').value/100);}
+function applyML(){var f=W/SRC.width,K=nmsBoxes(RAW,confNow());pts=K.map(function(z){return{x:(z[0]+z[2])/2*f,y:(z[1]+z[3])/2*f,r:Math.min(z[2]-z[0],z[3]-z[1])/2*f}});
+var rs=pts.map(function(p){return p.r}).sort(function(a,b){return a-b});R=rs.length?rs[rs.length>>1]:20;hist=[];nMan=0;$('szv').textContent='تلقائي';busy(0);draw();}
+async function runML(){try{if(!RAW)RAW=await detectRaw();applyML();}catch(e){console.error(e);busy(0);$('msg').textContent='نموذج الذكاء الاصطناعي ما اشتغلش على الجهاز ده، فاتعدّ بطريقة الألوان.';MODE='cv';setMode();runCV();}}
+function setMode(){$('mML').className=MODE==='ml'?'on':'';$('mCV').className=MODE==='cv'?'on':'';$('szl').style.display=MODE==='ml'?'none':'';}
 function rowsCols(){if(pts.length<2)return'—';var ys=pts.map(function(p){return p.y}).sort(function(a,b){return a-b}),rows=1;for(var i=1;i<ys.length;i++)if(ys[i]-ys[i-1]>R*0.9)rows++;var cols=Math.round(pts.length/rows);return rows+' × '+cols;}
 function order(){var P=pts.slice().sort(function(a,b){return a.y-b.y}),rows=[],cur=[];P.forEach(function(p){if(cur.length&&p.y-cur[cur.length-1].y>R*0.9){rows.push(cur);cur=[]}cur.push(p)});if(cur.length)rows.push(cur);var o=[];rows.forEach(function(r){r.sort(function(a,b){return b.x-a.x});o=o.concat(r)});return o;}
 function paint(x,scale,band){x.drawImage(IMG,0,band,W*scale,H*scale);var O=order(),rr=R*scale,fs=Math.max(10,Math.min(22,rr*0.75));x.lineWidth=Math.max(2,rr*0.09);
-O.forEach(function(p,i){var px=p.x*scale,py=p.y*scale+band;x.beginPath();x.arc(px,py,rr*0.82,0,7);x.strokeStyle='rgba(0,0,0,.55)';x.lineWidth=Math.max(3,rr*0.14);x.stroke();x.strokeStyle=p.m?'#22d3ee':'#4ade80';x.lineWidth=Math.max(2,rr*0.08);x.stroke();
+O.forEach(function(p,i){var px=p.x*scale,py=p.y*scale+band;x.beginPath();x.arc(px,py,(p.r||R)*scale*0.82,0,7);x.strokeStyle='rgba(0,0,0,.55)';x.lineWidth=Math.max(3,rr*0.14);x.stroke();x.strokeStyle=p.m?'#22d3ee':'#4ade80';x.lineWidth=Math.max(2,rr*0.08);x.stroke();
 x.font='bold '+fs+'px Cairo,Arial';x.textAlign='center';x.textBaseline='middle';var t=String(i+1),tw=x.measureText(t).width+8;x.fillStyle='rgba(22,40,90,.85)';x.fillRect(px-tw/2,py-fs*0.65,tw,fs*1.3);x.fillStyle='#fff';x.fillText(t,px,py+1);});}
 function draw(){cv.width=W;cv.height=H;paint(cx,1,0);$('tot').textContent=pts.length;$('rc').textContent=rowsCols();$('man').textContent=nMan;$('bsave').disabled=false;$('bsave').className='';
 $('msg').textContent='العدد: '+pts.length+' حبة. المس على حبة ناقصة علشان تضيفها، أو على علامة غلط علشان تشيلها.';}
 cv.addEventListener('click',function(e){if(!IMG)return;var b=cv.getBoundingClientRect(),x=(e.clientX-b.left)*W/b.width,y=(e.clientY-b.top)*H/b.height,bi=-1,bd=1e9;
-pts.forEach(function(p,i){var d=Math.hypot(p.x-x,p.y-y);if(d<bd){bd=d;bi=i}});hist.push(pts.slice());if(bi>=0&&bd<R*0.8){pts.splice(bi,1)}else{pts.push({x:x,y:y,m:1})}nMan++;draw();});
-$('undo').onclick=function(){if(hist.length){pts=hist.pop();nMan=Math.max(0,nMan-1);draw();}};$('redo').onclick=run;
-var tmr;function deb(){clearTimeout(tmr);tmr=setTimeout(run,250)}$('sz').oninput=function(){deb()};$('sn').oninput=function(){$('snv').textContent=this.value;deb()};$('gr').onchange=run;
+pts.forEach(function(p,i){var d=Math.hypot(p.x-x,p.y-y);if(d<bd){bd=d;bi=i}});hist.push(pts.slice());if(bi>=0&&bd<(pts[bi].r||R)*0.8){pts.splice(bi,1)}else{pts.push({x:x,y:y,m:1,r:R})}nMan++;draw();});
+$('undo').onclick=function(){if(hist.length){pts=hist.pop();nMan=Math.max(0,nMan-1);draw();}};$('redo').onclick=function(){if(MODE==='ml'&&RAW)applyML();else run()};
+var tmr;function deb(){clearTimeout(tmr);tmr=setTimeout(run,250)}$('sz').oninput=function(){deb()};$('sn').oninput=function(){$('snv').textContent=this.value;if(MODE==='ml'&&RAW){clearTimeout(tmr);tmr=setTimeout(applyML,150)}else deb()};$('gr').onchange=function(){if(MODE==='cv')run()};$('mML').onclick=function(){MODE='ml';setMode();run()};$('mCV').onclick=function(){MODE='cv';setMode();run()};setMode();
 $('bsave').onclick=function(){if(!IMG)return;var sc=Math.max(1,1080/Math.max(W,H)),band=Math.round(70*sc),c=document.createElement('canvas');c.width=Math.round(W*sc);c.height=Math.round(H*sc)+band;var x=c.getContext('2d');
 x.fillStyle='#16285A';x.fillRect(0,0,c.width,band);paint(x,sc,band);x.fillStyle='#fff';x.textAlign='right';x.textBaseline='middle';x.font='bold '+Math.round(30*sc)+'px Cairo,Arial';x.fillText('عدد الحبات: '+pts.length,c.width-16*sc,band/2);
 x.textAlign='left';x.font=Math.round(15*sc)+'px Cairo,Arial';var dt=new Date();x.fillText(dt.toLocaleDateString('ar-EG')+'  '+dt.toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'}),16*sc,band/2);
 c.toBlob(function(bl){var nm='عد_الحبات_'+pts.length+'.jpg',f=new File([bl],nm,{type:'image/jpeg'});if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:'عدد الحبات: '+pts.length}).catch(function(){})}else{var a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download=nm;a.click();}},'image/jpeg',0.9);};
+if('serviceWorker' in navigator)navigator.serviceWorker.register('counter-sw.js').catch(function(){});
 </script></body></html>
