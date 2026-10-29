@@ -32,7 +32,7 @@ details li{margin-bottom:4px;font-size:14px}.note{font-size:12px;color:var(--g)}
 #rep .pg{position:relative;padding-top:3mm}#rep .pb{page-break-before:always}
 #rep .cd{position:absolute;top:0;left:0;color:#b5b5b5;font-size:7pt;direction:ltr}
 #rep .top{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid #000;padding-bottom:1mm;margin-bottom:1.5mm}
-#rep .co{font-size:9.5pt;font-weight:700;color:#444}#rep h1{font-size:15pt;margin:0;font-weight:800}
+#rep .co{font-size:9.5pt;font-weight:700;color:#444}#rep .sp{font-size:7.5pt;color:#9a9a9a;font-weight:400;margin-top:-.5mm}#rep h1{font-size:15pt;margin:0;font-weight:800}
 #rep .meta{font-size:9pt;color:#333;text-align:left;direction:ltr}
 #rep .hg{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid #000;border-left:0;border-bottom:0;margin-bottom:1.5mm}
 #rep .hg div{border-left:1px solid #000;border-bottom:1px solid #000;padding:.6mm 1.5mm}#rep .hg small{display:block;font-size:7.5pt;color:#555}#rep .hg b{font-size:9.5pt}
@@ -50,7 +50,7 @@ details li{margin-bottom:4px;font-size:14px}.note{font-size:12px;color:var(--g)}
 #rep .phs{display:grid;grid-template-columns:repeat(3,1fr);gap:3mm}#rep figure{margin:0;border:1px solid #888;padding:1mm;break-inside:avoid}
 #rep figure img{width:100%;height:46mm;object-fit:cover;display:block}#rep figcaption{font-size:9pt;font-weight:700;text-align:center;margin-top:.5mm}}
 </style></head><body>
-<header><div class=hd><h1>استلام الخام<span class=tag>فحص عربيات الموالح عند الاستلام وتقرير لكل عربية</span><span id=ls style="display:block;font-size:11px;color:#cbd5e1;font-weight:400"></span></h1>
+<header><div class=hd><h1>استلام الخام<span class=tag>العلا لفرز الحاصلات الزراعية · فحص عربيات الموالح عند الاستلام</span><span style="display:block;font-size:11px;opacity:.55;font-weight:400">برعاية شركة الراشد للتجارة</span><span id=ls style="display:block;font-size:11px;color:#cbd5e1;font-weight:400"></span></h1>
 <div class=acts><button onclick="printRep()">🖨 تقرير العربية</button> <button class=ghost onclick="newTruck()">عربية جديدة</button> <a class=nav href="index.html">تكاليف الموالح ←</a> <a class=nav href="safi.html">صوافي ←</a></div></div></header>
 <main>
 <section><h2>إرشادات الاستلام خطوة بخطوة</h2>
@@ -196,7 +196,7 @@ const half=Math.ceil(ck.length/2);
 const opt=[h.brix&&'بريكس '+(+h.brix).toFixed(1)+'%',h.acid&&'حموضة '+(+h.acid).toFixed(2)+'%',h.juice&&'عصير '+(+h.juice).toFixed(1)+'%',h.color&&'لون القشرة '+h.color+' / 5'].filter(Boolean).join(' · ');
 const dedKg=Math.round(net*r.ded/100);
 const dtxt=r.cl=='bad'?'رفض':r.ded>0?`قبول مع خصم ${r.ded.toFixed(1)}% = ${dedKg.toLocaleString('en')} كجم`:r.decision;
-const hdr=(t)=>`<span class=cd>${h.code}</span><div class=top><div><div class=co>شركة الراشد للتجارة</div><h1>${t}</h1></div><div class=meta>${h.code}<br>${dt}</div></div>`;
+const hdr=(t)=>`<span class=cd>${h.code}</span><div class=top><div><div class=co>العلا لفرز الحاصلات الزراعية</div><div class=sp>برعاية شركة الراشد للتجارة</div><h1>${t}</h1></div><div class=meta>${h.code}<br>${dt}</div></div>`;
 const cnt={};PH.forEach(p=>cnt[p.cause]=(cnt[p.cause]||0)+1);const DN=Object.fromEntries(DEFS.map(d=>[d[0],d[1]]));
 document.getElementById('rep').innerHTML=`<div class=pg>${hdr('تقرير استلام سيارة خام')}
 <div class=hg>${cell('التاريخ والوقت',dt)}${cell('رقم السيارة',h.plate)}${cell('السائق',h.driver)}${cell('المورد',h.supplier)}${cell('المزرعة / المنطقة',h.region)}${cell('الصنف والنوع',v[h.variety])}${cell('عدد الصناديق',h.crates&&n(h.crates)+' صندوق')}${cell('متوسط وزن الصندوق',n(h.crates)&&net?(net/n(h.crates)).toFixed(1)+' كجم':'')}${cell('الوزن القائم',n(h.gross)&&kg(n(h.gross)))}${cell('الوزن الفارغ',n(h.tare)&&kg(n(h.tare)))}${cell('الوزن الصافي',net&&kg(net)+' ('+t2(net)+')')}${cell('العينة',N+' ثمرة'+(n(h.sampKg)?' / '+n(h.sampKg).toFixed(1)+' كجم':''))}${cell('متوسط وزن الثمرة',r.avgW?Math.round(r.avgW)+' جم':'')}${cell('صناديق العينة',r.nc+' صندوق (مقترح)')}${cell('الجودة (اختياري)',opt)}${cell('المقاسات',(isMur()?'بالوزن (جم)':'بالعدد'))}</div>
