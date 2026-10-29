@@ -1,0 +1,165 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>استلام الخام</title><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>*{box-sizing:border-box}:root{--n:#16285A;--n2:#22397a;--g:#64748b;--bg:#f1f4f9;--ln:#e2e8f0}
+body{font-family:Cairo,"Noto Naskh Arabic",Tahoma,Arial,sans-serif;margin:0;background:var(--bg);color:#1e293b;line-height:1.5}
+header{background:linear-gradient(135deg,var(--n),var(--n2));color:#fff;padding:18px 16px 46px}
+.hd{max-width:1100px;margin:auto;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+header h1{margin:0;font-size:26px;font-weight:800}header .tag{font-size:13px;opacity:.8;display:block;font-weight:400}
+.acts{display:flex;flex-wrap:wrap;gap:8px}
+button{background:var(--n);color:#fff;border:0;border-radius:10px;padding:9px 14px;font:inherit;font-weight:600;cursor:pointer}
+header button{background:#fff;color:var(--n)}header button.ghost,a.nav{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.5)}
+a.nav{font-size:13px;border-radius:10px;padding:8px 12px;text-decoration:none}
+button.sm{padding:4px 10px;font-size:13px}button.gr{background:#cbd5e1;color:#334155}
+main{max-width:1100px;margin:-30px auto 0;padding:0 12px 30px}
+section{background:#fff;border:1px solid var(--ln);border-radius:14px;padding:16px;margin-bottom:14px;box-shadow:0 2px 10px rgba(22,40,90,.06)}
+h2{font-size:17px;margin:0 0 12px;color:var(--n);font-weight:700;display:flex;align-items:center;gap:8px}h2:before{content:"";width:4px;height:18px;background:var(--n);border-radius:2px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+label{display:flex;flex-direction:column;gap:3px;font-size:13px;color:var(--g);font-weight:600}
+input,select,textarea{font:inherit;font-size:15px;padding:7px 9px;border:1px solid #cbd5e1;border-radius:9px;width:100%;color:#0f172a;background:#f8fafc;font-weight:600}
+input[readonly]{background:#eef2f9}
+table{width:100%;border-collapse:collapse;font-size:14px}td,th{border-bottom:1px solid var(--ln);padding:5px;text-align:right}th{color:var(--g);font-size:12px}
+td input{padding:4px 6px;font-size:14px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.card{background:linear-gradient(160deg,#f8fafc,#eef2f9);border:1px solid var(--ln);border-right:4px solid var(--n);border-radius:12px;padding:12px}
+.card small{display:block;color:var(--g);font-size:12px;font-weight:600}.card b{font-size:21px;display:block;color:var(--n);font-weight:800}.card i{font-size:11px;color:#94a3b8;font-style:normal}
+.dec{font-size:20px;font-weight:800;padding:12px;border-radius:12px;text-align:center}
+.ok{background:#dcfce7;color:#166534}.mid{background:#fef3c7;color:#92400e}.bad{background:#fee2e2;color:#991b1b}
+details{border:1px solid var(--ln);border-radius:10px;padding:8px 12px;margin-bottom:8px}summary{font-weight:700;color:var(--n);cursor:pointer}
+details li{margin-bottom:4px;font-size:14px}.note{font-size:12px;color:var(--g)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}.tabs button{background:#e2e8f0;color:#334155}.tabs button.on{background:var(--n);color:#fff}
+#rep{display:none}
+@media print{@page{size:A4;margin:9mm}body{background:#fff}header,main{display:none!important}#rep{display:block;color:#000;font-size:10.5px;line-height:1.35}
+#rep h1{font-size:16px;margin:0}#rep h3{font-size:11.5px;margin:6px 0 2px;border-bottom:1px solid #000}
+#rep table{font-size:10px}#rep td,#rep th{padding:1.5px 3px;border-bottom:1px solid #ccc;color:#000}
+#rep .cd{position:absolute;top:0;left:0;color:#bbb;font-size:8px}#rep .ex{color:#888;font-size:8.5px;display:block}
+#rep .two{display:flex;gap:10px}#rep .two>div{flex:1}#rep .bx{border:1.5px solid #000;padding:4px 6px;font-weight:800;font-size:12px;text-align:center;margin:4px 0}
+#rep .sig{display:flex;justify-content:space-between;margin-top:14px}#rep .sig div{width:30%;border-top:1px solid #000;text-align:center;padding-top:2px}}
+</style></head><body>
+<header><div class=hd><h1>استلام الخام<span class=tag>فحص عربيات الموالح عند الاستلام وتقرير لكل عربية</span><span id=ls style="display:block;font-size:11px;color:#cbd5e1;font-weight:400"></span></h1>
+<div class=acts><button onclick="printRep()">🖨 تقرير العربية</button> <button class=ghost onclick="newTruck()">عربية جديدة</button> <a class=nav href="index.html">تكاليف الموالح ←</a> <a class=nav href="safi.html">صوافي ←</a></div></div></header>
+<main>
+<section><h2>إرشادات الاستلام خطوة بخطوة</h2>
+<details><summary>1) أول ما العربية توصل – فحص العربية (قبل التنزيل)</summary><ol>
+<li>سجّل الوقت ورقم العربية والسواق والمزرعة، ووزّن العربية قائم على الميزان.</li>
+<li>الغطاء: العربية متغطية بمشمع/شبك؟ الثمار المكشوفة للشمس أكتر من ساعتين بتسخن وتتلسع وتعفن أسرع.</li>
+<li>حرارة الثمار: المس أو قيس بترمومتر ثمرة من الطبقة العليا ومن الوسط. ثمرة سخنة (أكتر من ~30°م) = نزّل بسرعة في الظل.</li>
+<li>النظافة: أرضية العربية، مفيش زيت أو سماد أو كيماويات أو تراب كتير.</li>
+<li>الصناديق: مكسورة؟ متعبية فوق الحافة (ضغط وكدمات)؟ صناديق وسخة أو فيها بقايا عفن؟</li>
+<li>الريحة: ريحة عفن أو تخمر عند فتح الغطاء = إنذار، ركّز على عينة الوسط والقاع.</li>
+<li>الثمار مبلولة (مطر/ندى/رش)؟ الثمار المبلولة والمجروحة أعلى خطر عفن أخضر وأزرق.</li>
+<li>سجّل كل ده في خانة «فحص العربية» تحت.</li></ol></details>
+<details><summary>2) سحب العينة (أهم خطوة)</summary><ol>
+<li>العينة لازم تمثل العربية كلها: صناديق من <b>القدام والنص والورا</b>، ومن <b>الطبقة العليا والوسطى والسفلى</b>، ومن الجنبين.</li>
+<li>عدد الصناديق: عربية حتى 300 صندوق ← 6 صناديق، 300–500 ← 8، أكتر من 500 ← 10 (قاعدة تقريبية ≈ جذر عدد الصناديق ÷ 3، البرنامج بيحسبها).</li>
+<li>اخلط الصناديق المسحوبة على ترابيزة وخد عشوائي <b>200 ثمرة</b> على الأقل (أو 100 ثمرة من كل جزء: قدام/نص/ورا).</li>
+<li>متختارش بعينك الثمار الحلوة أو الوحشة – خد اللي ييجي في إيدك.</li>
+<li>لو فيه شك في جزء من العربية (ريحة، بلل) اعمله عينة لوحده.</li></ol></details>
+<details><summary>3) ترتيب الفحص على العينة</summary><ol>
+<li>وزّن العينة كلها (كجم) واعدّ الثمار ← متوسط وزن الثمرة.</li>
+<li>افصل العفن الأول (أي ثمرة فيها عفن = عفن، حتى لو بسيط) وصنّف سببه.</li>
+<li>بعدها افصل العيوب: كل ثمرة تتسجل مرة واحدة تحت <b>أكبر عيب فيها</b>.</li>
+<li>بعدها قيس الأحجام لكل العينة: البرتقال بحلقات المقاسات أو الكاليبر حسب جدول العدد (36…113)، الموركوت بالوزن على ميزان جرامات.</li>
+<li>اختياري: سكر (بريكس) بالرفراكتومتر، حموضة، نسبة عصير، ولون القشرة (درجة من 1 أخضر إلى 5 برتقالي كامل).</li>
+<li>صوّر الثمار المعيبة والصناديق بتاريخ ورقم العربية.</li></ol></details>
+<details><summary>4) تمييز أسباب العفن</summary><ul>
+<li><b>عفن أخضر</b> (Penicillium digitatum): جراثيم خضرا زيتونية بحافة بيضا عريضة، طري. أكتر عفن شيوعًا، بيدخل من الجروح.</li>
+<li><b>عفن أزرق</b> (P. italicum): جراثيم زرقا مخضرة بحافة بيضا ضيقة، بينتقل للثمار الملاصقة (عش).</li>
+<li><b>عفن طرف العنق</b> (Diplodia / Alternaria): بني يبدأ من القمع أو السرة، Alternaria بتعفن السرة من جوه في أبوسرة.</li>
+<li><b>عفن بني</b> (Phytophthora): بني فاتح جلدي بريحة نفّاذة، من الثمار القريبة من الأرض بعد المطر/الري.</li>
+<li><b>أنثراكنوز</b>: بقع بني غامق غايرة على قشرة الثمار المجهدة.</li>
+<li><b>عفن حامضي</b> (Geotrichum): ثمرة طرية جدًا مايّة بريحة خل، طبقة بيضا كريمية.</li></ul></details>
+<details><summary>5) القرار</summary><ul>
+<li>البرنامج بيطلع قرار: <b>قبول</b> / <b>قبول مع خصم</b> / <b>رفض</b> حسب نسبة العفن ونسبة التصدير.</li>
+<li>الحدود الافتراضية (عفن ≤1% قبول، ≤3% قبول بخصم، أكتر رفض) أرقام عملية متعارف عليها وليست مواصفة رسمية – عدّلها في الإعدادات حسب اتفاقك مع المورّد.</li>
+<li>العفن بيزيد مع الوقت: عربية فيها 2% عفن النهارده ممكن تبقى 5% بعد أيام – شغّلها أول.</li></ul></details>
+</section>
+
+<section><h2>بيانات العربية</h2><div class=grid id=hdr></div>
+<h2 style="margin-top:14px">فحص العربية</h2><div class=grid id=chk></div></section>
+
+<section><h2>الأحجام</h2><div id=sizeBox></div></section>
+<section><h2>العفن والعيوب (عدد الثمار من نفس العينة)</h2><p class=note>كل ثمرة تتسجل مرة واحدة تحت أكبر عيب فيها. «يؤثر على» = عفن: هالك / رئيسي: محلي-عصير / ثانوي: تصدير بس يتسجل.</p><table id=defT></table></section>
+<section><h2>النتيجة</h2><div id=res></div></section>
+<section><h2>العربيات المحفوظة</h2><div class=acts style="margin-bottom:8px"><button onclick="saveHist()">💾 حفظ العربية في السجل</button><button class=gr onclick="exportCSV()">⬇ تصدير Excel</button></div><div id=hist></div></section>
+<section><h2>الإعدادات (حدود قابلة للتعديل)</h2><div class=grid id=setG></div><p class=note>دي قيم افتراضية عملية وليست مواصفة رسمية.</p><button class=gr onclick="resetSet()">رجّع الإعدادات الافتراضية</button></section>
+</main>
+<div id=rep></div>
+<script>
+const KEY='rcv_v1';
+const OR_SIZES=['أكبر من 36','36','40','48','56','64','72','80','88','100','113','أصغر من 113'];
+const VAR=[['navel','برتقال أبوسرة'],['baladi','برتقال بلدي'],['valencia','برتقال صيفي (فالنسيا)'],['murk','موركوت كيني'],['murs','موركوت إسباني']];
+const DEFS=[ // id,name,class(d decay,M major,m minor),only
+['green','عفن أخضر (Penicillium digitatum)','d'],['blue','عفن أزرق (P. italicum)','d'],['stem','عفن طرف العنق (Diplodia/Alternaria)','d'],['brown','عفن بني (Phytophthora)','d'],['anth','أنثراكنوز','d'],['sour','عفن حامضي (Geotrichum)','d'],['odec','عفن آخر','d'],
+['wind','خدوش ريح','m'],['mech','خدوش/كدمات ميكانيكية','M'],['sun','لسعة شمس','M'],['fly','حشرات / ذبابة فاكهة','M'],['mite','حلم صدأي / تربس','m'],['scale','حشرة قشرية','m'],['shape','تشوه شكل','M'],['split','تشقق','M'],['soft','لين / ذبول','M'],['green2','اخضرار لون','m'],['oleo','تبقع زيتي (Oleocellosis)','M'],['crease','تجعد القشرة (Creasing)','M'],
+['navsplit','انشقاق السرة','M','navel'],['bignav','سرة كبيرة','M','navel'],['puff','انتفاخ القشرة (Puffiness)','M','mur'],['other','عيب آخر','m']];
+const CLS={d:'عفن: هالك',M:'رئيسي: محلي/عصير',m:'ثانوي: تصدير'};
+const DSET={bands:'60,80,100,120,140,160,180,200,220,250',murMin:80,murMax:250,orExp:'36,40,48,56,64,72,80,88,100,113',decOk:1,decMax:3,expOk:75,expMin:50,decMult:1.5,defTol:10,defMult:0.5,sample:200};
+const HF=[['code','رقم/كود العربية'],['dt','التاريخ والوقت','datetime-local'],['plate','رقم العربية'],['driver','السواق'],['supplier','المورّد / المزرعة'],['region','المنطقة'],['variety','الصنف','sel'],['crates','عدد الصناديق','number'],['gross','الوزن القائم (كجم)','number'],['tare','الفارغ (كجم)','number'],['net','الصافي (كجم)','ro'],['avgc','متوسط وزن الصندوق (كجم)','ro'],['sampKg','وزن العينة (كجم)','number'],['brix','بريكس % (اختياري)','number'],['acid','حموضة % (اختياري)','number'],['juice','عصير % (اختياري)','number'],['color','لون القشرة 1-5 (اختياري)','number']];
+const CF=[['cover','الغطاء',['متغطية','مكشوفة جزئيًا','مكشوفة']],['clean','نظافة العربية',['نظيفة','مقبولة','وسخة']],['temp','حرارة الثمار',['طبيعية','دافية','سخنة']],['cratec','حالة الصناديق',['سليمة','بعض الكسر/زيادة تعبئة','سيئة']],['odor','الريحة',['طبيعية','ريحة خفيفة','ريحة عفن']],['wet','بلل الثمار',['ناشفة','بلل خفيف','مبلولة']]];
+let S;
+function blank(){return{h:{code:'',dt:new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,16),variety:'navel'},c:{},sz:{},wts:'',mode:'cnt',d:{},dn:{},notes:''}}
+function load(){try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!S)S={cur:blank(),set:{...DSET},hist:[]};S.set={...DSET,...S.set};}
+function save(){localStorage.setItem(KEY,JSON.stringify(S));document.getElementById('ls').textContent='آخر حفظ: '+new Date().toLocaleTimeString('ar-EG');}
+const isMur=()=>S.cur.h.variety.startsWith('mur');
+const n=v=>+v||0, f1=v=>(Math.round(v*10)/10).toLocaleString('en'), f0=v=>Math.round(v).toLocaleString('en'), pc=v=>f1(v)+'%';
+function bands(){const b=S.set.bands.split(/[,،\s]+/).map(Number).filter(x=>x>0).sort((a,b)=>a-b);const r=[{k:'<'+b[0],lo:0,hi:b[0]}];for(let i=0;i<b.length-1;i++)r.push({k:b[i]+'-'+b[i+1],lo:b[i],hi:b[i+1]});r.push({k:'>'+b[b.length-1],lo:b[b.length-1],hi:1e9});return r}
+function sizeKeys(){return isMur()?bands().map(b=>b.k):OR_SIZES}
+function isExpSize(k){if(isMur()){const b=bands().find(x=>x.k==k);return b&&b.lo>=n(S.set.murMin)&&b.hi<=n(S.set.murMax)}return S.set.orExp.split(/[,،\s]+/).includes(k)}
+function code(){const d=(S.cur.h.dt||'').slice(0,10).replace(/-/g,'');const used=S.hist.map(t=>t.h.code).filter(c=>c&&c.startsWith('RT-'+d));let i=1;while(used.includes('RT-'+d+'-'+String(i).padStart(3,'0')))i++;return 'RT-'+d+'-'+String(i).padStart(3,'0')}
+function build(){const h=S.cur.h;if(!h.code)h.code=code();
+document.getElementById('hdr').innerHTML=HF.map(([k,l,t])=>t=='sel'?`<label>${l}<select data-h=${k}>${VAR.map(v=>`<option value=${v[0]} ${h[k]==v[0]?'selected':''}>${v[1]}</option>`)}</select></label>`:`<label>${l}<input data-h=${k} ${t=='ro'?'readonly':''} type=${t&&t!='ro'?t:'text'} inputmode=${t=='number'?'decimal':'text'} value="${h[k]??''}"></label>`).join('');
+document.getElementById('chk').innerHTML=CF.map(([k,l,o])=>`<label>${l}<select data-c=${k}>${o.map((x,i)=>`<option value=${i} ${n(S.cur.c[k])==i?'selected':''}>${x}</option>`)}</select></label>`).join('')+`<label style="grid-column:1/-1">ملاحظات<textarea data-notes rows=2>${S.cur.notes||''}</textarea></label>`;
+let sb='';if(isMur())sb+=`<div class=tabs><button class="${S.cur.mode=='cnt'?'on':''}" onclick="S.cur.mode='cnt';save();build()">عدد لكل شريحة وزن</button><button class="${S.cur.mode=='w'?'on':''}" onclick="S.cur.mode='w';save();build()">أوزان الثمار فردية</button></div>`;
+if(isMur()&&S.cur.mode=='w')sb+=`<label>أوزان الثمار بالجرام (افصل بمسافة أو فاصلة)<textarea data-w rows=4 inputmode=decimal>${S.cur.wts}</textarea></label><div id=wsum class=note></div>`;
+else sb+=`<div class=grid>${sizeKeys().map(k=>`<label>${isMur()?k+' جم':'حجم '+k}${isExpSize(k)?'':' (خارج التصدير)'}<input data-s="${k}" type=number inputmode=numeric value="${S.cur.sz[k]??''}"></label>`).join('')}</div>`;
+sb+=`<p class=note>عدد الصناديق المقترح للعينة: <b id=nc></b> صندوق – وعدد الثمار المستهدف ${S.set.sample} ثمرة.</p>`;
+document.getElementById('sizeBox').innerHTML=sb;
+document.getElementById('defT').innerHTML='<tr><th>السبب</th><th>يؤثر على</th><th style="width:80px">عدد</th><th>ملاحظة</th></tr>'+DEFS.filter(d=>!d[3]||(d[3]=='navel'?h.variety=='navel':isMur())).map(([k,l,c])=>`<tr><td>${l}</td><td class=note>${CLS[c]}</td><td><input data-d=${k} type=number inputmode=numeric value="${S.cur.d[k]??''}"></td><td><input data-dn=${k} value="${S.cur.dn[k]??''}"></td></tr>`).join('');
+document.getElementById('setG').innerHTML=[['bands','حدود شرائح وزن الموركوت (جم)','text'],['murMin','أقل وزن موركوت للتصدير (جم)'],['murMax','أكبر وزن موركوت للتصدير (جم)'],['orExp','أحجام البرتقال للتصدير','text'],['decOk','عفن مقبول بدون خصم ≤ %'],['decMax','أقصى عفن للقبول بخصم ≤ %'],['expOk','نسبة تصدير للقبول ≥ %'],['expMin','أقل نسبة تصدير قبل الرفض %'],['decMult','معامل خصم العفن (× العفن الزايد)'],['defTol','عيوب رئيسية مسموحة %'],['defMult','معامل خصم العيوب الزايدة'],['sample','ثمار العينة المستهدفة']].map(([k,l,t])=>`<label>${l}<input data-set=${k} type=${t||'number'} inputmode=${t?'text':'decimal'} value="${S.set[k]}"></label>`).join('');
+calc();hist()}
+function weights(){return(S.cur.wts||'').split(/[^\d.]+/).map(Number).filter(x=>x>0)}
+function calc(){const h=S.cur.h;h.net=Math.max(0,n(h.gross)-n(h.tare))||'';h.avgc=n(h.crates)&&h.net?Math.round(h.net/n(h.crates)*10)/10:'';
+['net','avgc'].forEach(k=>{const e=document.querySelector(`[data-h=${k}]`);if(e)e.value=h[k]});
+const keys=sizeKeys();let cnt={};let wl=[];
+if(isMur()&&S.cur.mode=='w'){wl=weights();const B=bands();keys.forEach(k=>cnt[k]=0);wl.forEach(w=>{const b=B.find(b=>w>=b.lo&&w<b.hi)||B[B.length-1];cnt[b.k]++});const e=document.getElementById('wsum');if(e)e.textContent=wl.length+' ثمرة – '+keys.map(k=>k+': '+cnt[k]).join(' | ')}
+else keys.forEach(k=>cnt[k]=n(S.cur.sz[k]));
+const N=keys.reduce((a,k)=>a+cnt[k],0);const nc=Math.max(5,Math.min(12,Math.round(Math.sqrt(n(h.crates)||300)/3)+(n(h.crates)>300?2:0)));const ne=document.getElementById('nc');if(ne)ne.textContent=n(h.crates)?nc:'6–10';
+const defs=DEFS.filter(d=>!d[3]||(d[3]=='navel'?h.variety=='navel':isMur()));const by={d:0,M:0,m:0};defs.forEach(([k,,c])=>by[c]+=n(S.cur.d[k]));
+const off=keys.filter(k=>!isExpSize(k)).reduce((a,k)=>a+cnt[k],0);const net=n(h.net)/1000;
+const P=x=>N?x/N*100:0;const dec=P(by.d),maj=P(by.M),mi=P(by.m);
+const sound=1-(by.d+by.M)/(N||1);const exp=Math.max(0,P(N-by.d-by.M)-P(off)*sound);const rej=dec;const loc=Math.max(0,100-exp-rej);
+let avgW=wl.length?wl.reduce((a,b)=>a+b,0)/wl.length:(n(h.sampKg)&&N?n(h.sampKg)*1000/N:0);
+const st=S.set;let decision,cl;const ded=Math.max(0,dec-st.decOk)*st.decMult+Math.max(0,maj-st.defTol)*st.defMult;
+if(!N){decision='أدخل العينة';cl='mid'}else if(dec>st.decMax||exp<st.expMin){decision='رفض';cl='bad'}else if(dec<=st.decOk&&exp>=st.expOk&&ded==0){decision='قبول';cl='ok'}else{decision='قبول مع خصم '+pc(ded);cl='mid'}
+const tchk=CF.filter(([k])=>n(S.cur.c[k])>0).map(([k,l,o])=>l+': '+o[n(S.cur.c[k])]);
+R={N,cnt,keys,by,dec,maj,mi,exp,loc,rej,net,avgW,decision,cl,ded:N&&cl!='bad'?ded:0,defs,off,tchk,nc};
+const card=(t,v,e)=>`<div class=card><small>${t}</small><b>${v}</b><i>${e}</i></div>`;
+document.getElementById('res').innerHTML=`<div class="dec ${cl}">${decision}</div><br><div class=cards>${card('الصافي',f1(net)+' طن','القائم − الفارغ')}${card('ثمار العينة',f0(N),'مجموع الأحجام')}${card('تصدير',pc(exp),'≈ '+f1(net*exp/100)+' طن – سليم وفي مقاسات التصدير')}${card('محلي / عصير',pc(loc),'≈ '+f1(net*loc/100)+' طن – عيوب رئيسية أو خارج المقاس')}${card('هالك (عفن)',pc(rej),'≈ '+f1(net*rej/100)+' طن – ثمار معفنة')}${card('عيوب ثانوية',pc(mi),'محسوبة ضمن التصدير')}${card('متوسط وزن الثمرة',avgW?f0(avgW)+' جم':'—',wl.length?'من الأوزان الفردية':'وزن العينة ÷ عددها')}${card('خصم مقترح',pc(R.ded),'زيادة العفن والعيوب عن المسموح')}</div>
+<h2 style="margin-top:14px">توزيع الأحجام</h2><table><tr><th>${isMur()?'وزن (جم)':'حجم'}</th><th>عدد</th><th>%</th><th>طن تقديري</th></tr>${keys.map(k=>`<tr><td>${k}${isExpSize(k)?'':' *'}</td><td>${cnt[k]}</td><td>${pc(P(cnt[k]))}</td><td>${f1(net*P(cnt[k])/100)}</td></tr>`).join('')}</table><p class=note>* خارج مقاسات التصدير</p>
+<h2>العيوب حسب السبب</h2><table><tr><th>السبب</th><th>عدد</th><th>%</th></tr>${defs.filter(d=>n(S.cur.d[d[0]])).map(d=>`<tr><td>${d[1]}</td><td>${S.cur.d[d[0]]}</td><td>${pc(P(n(S.cur.d[d[0]])))}</td></tr>`).join('')||'<tr><td colspan=3>لا يوجد</td></tr>'}</table>`;}
+let R;
+document.addEventListener('input',e=>{const t=e.target,d=t.dataset;if(d.h){S.cur.h[d.h]=t.value;if(d.h=='variety'){save();return build()}}else if(d.c)S.cur.c[d.c]=t.value;else if(d.s)S.cur.sz[d.s]=t.value;else if(d.d)S.cur.d[d.d]=t.value;else if(d.dn!=null&&t.dataset.dn)S.cur.dn[d.dn]=t.value;else if(t.hasAttribute('data-w'))S.cur.wts=t.value;else if(t.hasAttribute('data-notes'))S.cur.notes=t.value;else if(d.set){S.set[d.set]=t.type=='number'?n(t.value):t.value;save();clearTimeout(window._b);window._b=setTimeout(build,600);return}else return;save();calc()});
+document.addEventListener('change',e=>{if(e.target.dataset.h=='variety'){S.cur.h.variety=e.target.value;save();build()}});
+function newTruck(){if(!confirm('تبدأ عربية جديدة؟ البيانات الحالية هتتمسح من الشاشة (احفظها في السجل الأول).'))return;S.cur=blank();save();build()}
+function saveHist(){calc();const t=JSON.parse(JSON.stringify(S.cur));t.r={exp:R.exp,dec:R.dec,loc:R.loc,net:R.net,decision:R.decision,avgW:R.avgW,ded:R.ded,N:R.N};const i=S.hist.findIndex(x=>x.h.code==t.h.code);if(i>=0)S.hist[i]=t;else S.hist.unshift(t);save();hist();alert('اتحفظت العربية '+t.h.code)}
+function hist(){const v=Object.fromEntries(VAR);document.getElementById('hist').innerHTML=S.hist.length?'<table><tr><th>الكود</th><th>التاريخ</th><th>المورّد</th><th>الصنف</th><th>طن</th><th>تصدير</th><th>عفن</th><th>القرار</th><th></th></tr>'+S.hist.map((t,i)=>`<tr><td>${t.h.code}</td><td>${(t.h.dt||'').replace('T',' ')}</td><td>${t.h.supplier||''}</td><td>${v[t.h.variety]}</td><td>${f1(t.r.net)}</td><td>${pc(t.r.exp)}</td><td>${pc(t.r.dec)}</td><td>${t.r.decision}</td><td><button class=sm onclick="openH(${i})">فتح</button> <button class="sm gr" onclick="delH(${i})">حذف</button></td></tr>`).join('')+'</table>':'<p class=note>لسه مفيش عربيات محفوظة.</p>'}
+function openH(i){S.cur=JSON.parse(JSON.stringify(S.hist[i]));delete S.cur.r;save();build();scrollTo(0,0)}
+function delH(i){if(!confirm('تمسح العربية '+S.hist[i].h.code+' من السجل؟'))return;S.hist.splice(i,1);save();hist()}
+function resetSet(){if(!confirm('ترجع كل الإعدادات للقيم الافتراضية؟'))return;S.set={...DSET};save();build()}
+function exportCSV(){const v=Object.fromEntries(VAR);const H=['الكود','التاريخ','رقم العربية','السواق','المورد','المنطقة','الصنف','صناديق','الصافي كجم','ثمار العينة','متوسط وزن الثمرة جم','تصدير %','محلي %','عفن %','خصم %','القرار'];
+const rows=S.hist.map(t=>[t.h.code,(t.h.dt||'').replace('T',' '),t.h.plate,t.h.driver,t.h.supplier,t.h.region,v[t.h.variety],t.h.crates,t.h.net,t.r.N,Math.round(t.r.avgW),f1(t.r.exp),f1(t.r.loc),f1(t.r.dec),f1(t.r.ded),t.r.decision]);
+const csv='\ufeff'+[H,...rows].map(r=>r.map(x=>'"'+String(x??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='استلام_الخام.csv';a.click()}
+function printRep(){calc();const h=S.cur.h,v=Object.fromEntries(VAR),r=R,P=x=>r.N?x/r.N*100:0;
+const row=(a,b)=>`<tr><td>${a}</td><td><b>${b??''}</b></td></tr>`;
+document.getElementById('rep').innerHTML=`<div style="position:relative;padding-top:10px"><span class=cd>${h.code}</span>
+<h1>تقرير استلام خام – ${v[h.variety]}</h1><div style="color:#555">الكود ${h.code} · ${(h.dt||'').replace('T',' ')}</div>
+<div class=two><div><h3>بيانات العربية</h3><table>${row('رقم العربية',h.plate)}${row('السواق',h.driver)}${row('المورّد / المزرعة',h.supplier)}${row('المنطقة',h.region)}${row('عدد الصناديق',h.crates)}</table></div>
+<div><h3>الأوزان</h3><table>${row('القائم (كجم)',f0(n(h.gross)))}${row('الفارغ (كجم)',f0(n(h.tare)))}${row('الصافي (كجم)',f0(n(h.net))+'<span class=ex>الوزن القائم ناقص الفارغ</span>')}${row('متوسط الصندوق (كجم)',h.avgc)}${row('متوسط وزن الثمرة',r.avgW?f0(r.avgW)+' جم':'—')}</table></div></div>
+<div class="bx">القرار: ${r.decision}${r.ded?' — خصم مقترح '+pc(r.ded)+' ≈ '+f0(n(h.net)*r.ded/100)+' كجم':''}<span class=ex>حسب حدود الإعدادات: عفن مقبول ≤${S.set.decOk}%، رفض فوق ${S.set.decMax}% أو تصدير أقل من ${S.set.expMin}%</span></div>
+<div class=two><div><h3>توزيع الأحجام (عينة ${r.N} ثمرة)</h3><table><tr><th>${isMur()?'وزن جم':'حجم'}</th><th>عدد</th><th>%</th><th>طن</th></tr>${r.keys.map(k=>`<tr><td>${k}${isExpSize(k)?'':' *'}</td><td>${r.cnt[k]}</td><td>${pc(P(r.cnt[k]))}</td><td>${f1(r.net*P(r.cnt[k])/100)}</td></tr>`).join('')}<tr><td><b>الإجمالي</b></td><td><b>${r.N}</b></td><td><b>100%</b></td><td><b>${f1(r.net)}</b></td></tr></table><span class=ex>* خارج مقاسات التصدير · الطن = الصافي × نسبة الحجم في العينة</span></div>
+<div><h3>العفن والعيوب</h3><table><tr><th>السبب</th><th>عدد</th><th>%</th></tr>${r.defs.filter(d=>n(S.cur.d[d[0]])).map(d=>`<tr><td>${d[1]}${S.cur.dn[d[0]]?' – '+S.cur.dn[d[0]]:''}</td><td>${S.cur.d[d[0]]}</td><td>${pc(P(n(S.cur.d[d[0]])))}</td></tr>`).join('')||'<tr><td colspan=3>لا يوجد</td></tr>'}
+<tr><td><b>إجمالي العفن</b></td><td><b>${r.by.d}</b></td><td><b>${pc(r.dec)}</b></td></tr><tr><td><b>عيوب رئيسية</b></td><td><b>${r.by.M}</b></td><td><b>${pc(r.maj)}</b></td></tr><tr><td><b>عيوب ثانوية</b></td><td><b>${r.by.m}</b></td><td><b>${pc(r.mi)}</b></td></tr></table><span class=ex>النسبة = عدد الثمار ÷ ثمار العينة · كل ثمرة متسجلة تحت أكبر عيب فيها</span>
+<h3>الفرز التقديري للعربية</h3><table>${row('تصدير',pc(r.exp)+' ≈ '+f1(r.net*r.exp/100)+' طن<span class=ex>ثمار سليمة أو بعيب ثانوي وفي مقاسات التصدير</span>')}${row('محلي / عصير',pc(r.loc)+' ≈ '+f1(r.net*r.loc/100)+' طن<span class=ex>عيوب رئيسية أو خارج المقاس</span>')}${row('هالك',pc(r.rej)+' ≈ '+f1(r.net*r.rej/100)+' طن<span class=ex>ثمار معفنة</span>')}</table></div></div>
+<h3>فحص العربية والجودة</h3><div>${r.tchk.length?r.tchk.join(' · '):'العربية سليمة (غطاء، نظافة، حرارة، صناديق، ريحة، بلل)'}${h.brix?' · بريكس '+h.brix+'%':''}${h.acid?' · حموضة '+h.acid+'%':''}${h.juice?' · عصير '+h.juice+'%':''}${h.color?' · لون '+h.color+'/5':''}</div>${S.cur.notes?'<div>ملاحظات: '+S.cur.notes+'</div>':''}
+<div class=sig><div>مسؤول الاستلام</div><div>مسؤول الجودة</div><div>المورّد / السواق</div></div></div>`;setTimeout(()=>window.print(),50)}
+load();build();save();
+</script></body></html>
